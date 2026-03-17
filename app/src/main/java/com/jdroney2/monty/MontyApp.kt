@@ -27,16 +27,16 @@ fun MontyApp(state: GameState, viewModel: MontyViewModel) {
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
 
-            // Left — Sidebar
+
             Sidebar(state = state)
 
-            // Center/Right — Cards + Bottom bar
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
 
-                // Cards area (takes up most of the screen)
+                // Cards area
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -46,7 +46,7 @@ fun MontyApp(state: GameState, viewModel: MontyViewModel) {
                     GameCards(state = state, viewModel = viewModel)
                 }
 
-                // Bottom bar — balance + buttons
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -21,7 +21,7 @@ fun GameButtons(state: GameState, viewModel: MontyViewModel) {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(end = 16.dp, bottom = 8.dp)
     ) {
-        // Reset — always available
+        // Reset
         Button(
             onClick = { viewModel.resetGame() },
             colors = ButtonDefaults.buttonColors(

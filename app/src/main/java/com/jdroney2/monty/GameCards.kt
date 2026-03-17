@@ -59,7 +59,7 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
             }
         }
 
-        // Winner overlay
+
         if (state.phase == GamePhase.RESULT_WIN) {
             Image(
                 painter = painterResource(id = R.drawable.winner),
@@ -71,7 +71,6 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
             )
         }
 
-        // Loser overlay
         if (state.phase == GamePhase.RESULT_LOSE) {
             Image(
                 painter = painterResource(id = R.drawable.loser),
