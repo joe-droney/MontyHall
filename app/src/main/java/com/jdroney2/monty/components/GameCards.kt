@@ -1,4 +1,4 @@
-package com.jdroney2.monty
+package com.jdroney2.monty.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -21,10 +21,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jdroney2.monty.Door
-import com.jdroney2.monty.GamePhase
-import com.jdroney2.monty.GameState
 import com.jdroney2.monty.toDrawable
 import com.jdroney2.monty.MontyViewModel
+import com.jdroney2.monty.R
 
 @Composable
 fun GameCards(state: GameState, viewModel: MontyViewModel) {
@@ -32,7 +31,6 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // 3 cards
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -45,14 +43,8 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
                     door = door,
                     phase = state.phase,
                     onClick = {
-                        when (state.phase) {
-                            GamePhase.PICKING -> viewModel.selectDoor(door.id)
-                            GamePhase.SWITCHING -> {
-                                if (!door.isRevealed) {
-                                    viewModel.makeDecision(stay = door.isSelected)
-                                }
-                            }
-                            else -> {}
+                        if (state.phase == GamePhase.PICKING) {
+                            viewModel.selectDoor(door.id)
                         }
                     }
                 )
@@ -87,20 +79,17 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
 @Composable
 fun CardSlot(door: Door, phase: GamePhase, onClick: () -> Unit) {
     val borderColor = when {
-        door.isSelected && !door.isRevealed -> Color(0xFFFFD700) // gold border on pick
+        door.isSelected && phase == GamePhase.RESULT_WIN -> Color.Green
+        door.isSelected && phase == GamePhase.RESULT_LOSE -> Color.Red
         else -> Color.Transparent
     }
 
     val alpha = when {
-        door.isRevealed && !door.hasPrize -> 0.5f // dim revealed goat
+        phase != GamePhase.IDLE && phase != GamePhase.PICKING && !door.isSelected -> 0.5f
         else -> 1f
     }
 
-    val clickable = when (phase) {
-        GamePhase.PICKING -> true
-        GamePhase.SWITCHING -> !door.isRevealed
-        else -> false
-    }
+    val clickable = phase == GamePhase.PICKING
 
     Box(
         modifier = Modifier

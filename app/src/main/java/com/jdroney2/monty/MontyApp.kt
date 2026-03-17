@@ -15,8 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jdroney2.monty.GameState
-import com.jdroney2.monty.MontyViewModel
+import com.jdroney2.monty.components.GameButtons
+import com.jdroney2.monty.components.GameCards
+import com.jdroney2.monty.components.GameState
 
 @Composable
 fun MontyApp(state: GameState, viewModel: MontyViewModel) {

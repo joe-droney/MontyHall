@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jdroney2.monty.GameState
+import com.jdroney2.monty.components.GameState
 
 @Composable
 fun Sidebar(state: GameState) {
