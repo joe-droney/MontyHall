@@ -85,9 +85,6 @@ class MontyViewModel : ViewModel() {
     }
 
     fun resetGame() {
-        prizeDoorId = -1
-        firstPickId = -1
-        _gameState.value = GameState()
         startNewGame()
     }
 
