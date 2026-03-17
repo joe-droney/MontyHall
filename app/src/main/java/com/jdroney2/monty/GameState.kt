@@ -1,6 +1,6 @@
 package com.jdroney2.monty
 
-import com.jdroney2.monty.ui.theme.Door
+
 
 
 data class GameState(
@@ -8,12 +8,13 @@ data class GameState(
     val phase: GamePhase = GamePhase.PICKING,
     val wins: Int = 0,
     val losses: Int = 0,
-    val totalGames: Int = 0
+    val totalGames: Int = 0,
+    val balance: Int = 750
 )
 
 enum class GamePhase {
-    PICKING,       // Player picks initial door
-    SWITCHING,     // Goat revealed — switch or stay?
+    PICKING,
+    SWITCHING,
     RESULT_WIN,
     RESULT_LOSE
 }

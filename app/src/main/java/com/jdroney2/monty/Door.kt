@@ -1,6 +1,4 @@
-package com.jdroney2.monty.ui.theme
-
-import com.jdroney2.monty.R
+package com.jdroney2.monty
 
 data class Door(
     val id: Int,
