@@ -47,7 +47,7 @@ class MontyViewModel : ViewModel() {
             if (door.id == doorId) {
                 door.copy(isRevealed = true, isSelected = true)
             } else {
-                // Reveal all doors at the end
+
                 door.copy(isRevealed = true)
             }
         }

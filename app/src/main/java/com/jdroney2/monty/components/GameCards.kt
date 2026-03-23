@@ -142,7 +142,7 @@ fun CardSlot(
 ) {
     val isResult = phase == GamePhase.RESULT_WIN || phase == GamePhase.RESULT_LOSE
 
-    // Only flip the selected card
+
     val shouldFlip = door.isSelected && (phase == GamePhase.SWITCHING || isResult)
 
     val flipAngle by animateFloatAsState(
@@ -151,7 +151,7 @@ fun CardSlot(
         label = "flip"
     )
 
-    // Past 90 degrees we show the front face
+
     val isFaceUp = flipAngle > 90f
 
     val borderColor = when {
@@ -175,7 +175,7 @@ fun CardSlot(
             .alpha(cardAlpha)
             .border(3.dp, borderColor, RoundedCornerShape(8.dp))
             .graphicsLayer {
-                // Rotate around Y axis for flip effect
+
                 rotationY = flipAngle
                 cameraDistance = 12f * density
             }
@@ -191,7 +191,7 @@ fun CardSlot(
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {
-                    // Mirror correction — prevents text/image appearing backwards on front face
+
                     rotationY = if (isFaceUp) 180f else 0f
                 }
         )

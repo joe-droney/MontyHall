@@ -19,7 +19,7 @@ fun GameButtons(state: GameState, viewModel: MontyViewModel) {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(end = 16.dp, bottom = 8.dp)
     ) {
-        // Reset - only available after a card is selected (RESULT states)
+
         val resetEnabled = state.phase == GamePhase.RESULT_WIN || state.phase == GamePhase.RESULT_LOSE
         
         Button(
@@ -33,7 +33,7 @@ fun GameButtons(state: GameState, viewModel: MontyViewModel) {
             Text("Reset", fontSize = 14.sp)
         }
 
-        // Play - enables card clicking
+
         Button(
             onClick = { viewModel.play() },
             enabled = state.phase == GamePhase.IDLE,
