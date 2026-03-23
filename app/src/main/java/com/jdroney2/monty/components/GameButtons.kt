@@ -19,11 +19,15 @@ fun GameButtons(state: GameState, viewModel: MontyViewModel) {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(end = 16.dp, bottom = 8.dp)
     ) {
-        // Reset - always available to start over
+        // Reset - only available after a card is selected (RESULT states)
+        val resetEnabled = state.phase == GamePhase.RESULT_WIN || state.phase == GamePhase.RESULT_LOSE
+        
         Button(
             onClick = { viewModel.resetGame() },
+            enabled = resetEnabled,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF546E7A)
+                containerColor = Color(0xFF546E7A),
+                disabledContainerColor = Color(0xFF37474F).copy(alpha = 0.5f)
             )
         ) {
             Text("Reset", fontSize = 14.sp)
