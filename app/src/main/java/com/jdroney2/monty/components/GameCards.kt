@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -35,31 +36,24 @@ import kotlinx.coroutines.delay
 @Composable
 fun GameCards(state: GameState, viewModel: MontyViewModel) {
 
-    // Controls whether cards are spread out or stacked
     var spread by remember { mutableStateOf(false) }
 
-    // Logic for card spreading and stacking
     LaunchedEffect(state.phase) {
         when (state.phase) {
             GamePhase.IDLE -> {
-                // When reset is clicked, return to stack
                 spread = false
             }
             GamePhase.PICKING -> {
-                // When starting a new round, ensure they stack briefly then spread
                 spread = false
                 delay(300)
                 spread = true
             }
-            // We removed the collapse logic from RESULT phases so they stay spread
             else -> {}
         }
     }
 
-    // Spread offsets push cards left/center/right
     val spreadOffsets = listOf(-160f, 0f, 160f)
     val stackRotations = listOf(-6f, 0f, 6f)
-
     val animSpec = tween<Float>(durationMillis = 500)
 
     val offsets = spreadOffsets.map { target ->
@@ -97,7 +91,6 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // Render cards in reverse so card 0 is on top of stack
         state.doors.indices.reversed().forEach { index ->
             val door = state.doors[index]
             CardSlot(
@@ -113,7 +106,6 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
             )
         }
 
-        // Winner overlay
         if (winAlpha > 0f) {
             Image(
                 painter = painterResource(id = R.drawable.winner),
@@ -126,7 +118,6 @@ fun GameCards(state: GameState, viewModel: MontyViewModel) {
             )
         }
 
-        // Loser overlay
         if (loseAlpha > 0f) {
             Image(
                 painter = painterResource(id = R.drawable.loser),
@@ -151,12 +142,24 @@ fun CardSlot(
 ) {
     val isResult = phase == GamePhase.RESULT_WIN || phase == GamePhase.RESULT_LOSE
 
+    // Only flip the selected card
+    val shouldFlip = door.isSelected && (phase == GamePhase.SWITCHING || isResult)
+
+    val flipAngle by animateFloatAsState(
+        targetValue = if (shouldFlip) 180f else 0f,
+        animationSpec = tween(durationMillis = 400),
+        label = "flip"
+    )
+
+    // Past 90 degrees we show the front face
+    val isFaceUp = flipAngle > 90f
+
     val borderColor = when {
         door.isSelected && isResult -> Color(0xFFFFD700)
         else -> Color.Transparent
     }
 
-    val alpha = when {
+    val cardAlpha = when {
         door.isRevealed && !door.hasPrize && isResult -> 0.5f
         else -> 1f
     }
@@ -169,15 +172,28 @@ fun CardSlot(
             .aspectRatio(0.65f)
             .offset(x = offsetX.dp)
             .rotate(rotation)
-            .alpha(alpha)
+            .alpha(cardAlpha)
             .border(3.dp, borderColor, RoundedCornerShape(8.dp))
+            .graphicsLayer {
+                // Rotate around Y axis for flip effect
+                rotationY = flipAngle
+                cameraDistance = 12f * density
+            }
             .clickable(enabled = clickable) { onClick() }
     ) {
         Image(
-            painter = painterResource(id = door.toDrawable()),
+            painter = painterResource(
+                // Swap image at the halfway point of the flip
+                id = if (isFaceUp) door.toDrawable() else R.drawable.card_back
+            ),
             contentDescription = "Door ${door.id}",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer {
+                    // Mirror correction — prevents text/image appearing backwards on front face
+                    rotationY = if (isFaceUp) 180f else 0f
+                }
         )
     }
 }

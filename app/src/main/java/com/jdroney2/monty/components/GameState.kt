@@ -15,6 +15,7 @@ data class GameState(
 enum class GamePhase {
     IDLE,
     PICKING,
+    SWITCHING,
     RESULT_WIN,
     RESULT_LOSE
 }
