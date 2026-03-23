@@ -48,18 +48,14 @@ fun MontyApp(state: GameState, viewModel: MontyViewModel) {
                 }
 
 
+                // Bottom button
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "You currently have: $${state.balance}",
-                        color = Color.White,
-                        fontSize = 14.sp
-                    )
                     GameButtons(state = state, viewModel = viewModel)
                 }
             }
